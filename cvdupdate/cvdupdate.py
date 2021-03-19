@@ -99,6 +99,7 @@ class CVDUpdate:
         config: str  = "",
         log_dir: str = "",
         db_dir: str  = "",
+        url: str = "",
         nameserver: str  = "",
         verbose: bool = False,
     ) -> None:
@@ -115,6 +116,7 @@ class CVDUpdate:
         self._read_config(
             config,
             db_dir,
+            url,
             log_dir,
             nameserver)
         self._init_logging()
@@ -165,6 +167,7 @@ class CVDUpdate:
     def _read_config(self,
                      config: str,
                      db_dir: str,
+                     url: str,
                      log_dir: str,
                      nameserver: str) -> None:
         """
@@ -197,6 +200,10 @@ class CVDUpdate:
             need_save = True
         self.db_dir = Path(self.config["db directory"])
 
+        if url != "":
+            self._update_upstream_url(url)
+            need_save = True
+
         if log_dir != "":
             self.config["log directory"] = log_dir
             need_save = True
@@ -216,6 +223,15 @@ class CVDUpdate:
 
         if need_save:
             self._save_config()
+
+    def _update_upstream_url(self, url) -> None:
+        """
+        Update the signature URL
+        """
+        if url == '': url = "https://database.clamav.net"
+        self.config["dbs"]["main.cvd"]["url"] = "%s/main.cvd" % (url,)
+        self.config["dbs"]["daily.cvd"]["url"] = "%s/daily.cvd" % (url,)
+        self.config["dbs"]["bytecode.cvd"]["url"] = "%s/bytecode.cvd" % (url,)
 
     def _save_config(self) -> None:
         """

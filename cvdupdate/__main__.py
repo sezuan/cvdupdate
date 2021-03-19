@@ -137,8 +137,9 @@ def config():
 @click.option("--verbose", "-V", is_flag=True, default=False, help="Verbose output. [optional]")
 @click.option("--logdir", "-l", type=click.Path(), required=False, default="", help="Set a custom log directory. [optional]")
 @click.option("--dbdir", "-d", type=click.Path(), required=False, default="", help="Set a custom database directory. [optional]")
+@click.option("--url", "-u", type=click.Path(), required=False, default="", help="Set a custom signature url. [optional]")
 @click.option("--nameserver", "-n", type=click.STRING, required=False, default="", help="Set a custom DNS nameserver. [optional]")
-def config_set(config: str, verbose: bool, logdir: str, dbdir: str, nameserver: str):
+def config_set(config: str, verbose: bool, logdir: str, dbdir: str, url: str, nameserver: str):
     """
     Set up first time configuration.
 
@@ -149,6 +150,7 @@ def config_set(config: str, verbose: bool, logdir: str, dbdir: str, nameserver: 
         verbose=verbose,
         log_dir=logdir,
         db_dir=dbdir,
+        url=url,
         nameserver=nameserver)
 
 @config.command("show")
